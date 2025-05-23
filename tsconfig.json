@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "CommonJS",
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "esModuleInterop": true,
+      "moduleResolution": "Node",
+      "forceConsistentCasingInFileNames" : true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "skipLibCheck": true,
+      "baseUrl": "./",
+      "paths": {
+        "@config/*": ["src/config/*"],
+        "@controllers/*": ["src/controllers/*"],
+        "@entities/*": ["src/entities/*"],
+        "@middlewares/*": ["src/middlewares/*"],
+        "@repositories/*": ["src/repositories/*"],
+        "@routes/*": ["src/routes/*"],
+        "@services/*": ["src/services/*"],
+        "@dtos/*" : ["src/dto/*"]
+      }
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+  }
+  

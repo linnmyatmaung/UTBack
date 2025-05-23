@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/" # Location of package.json and package-lock.json
+    schedule:
+      interval: "weekly" # Check for updates weekly
+    open-pull-requests-limit: 5 # (Optional) Limit to 5 PRs at a time
+
+  - package-ecosystem: "github-actions"
+    directory: "/" # Default location: .github/workflows/
+    schedule:
+      interval: "monthly" # Check for updates to GitHub Actions monthly
