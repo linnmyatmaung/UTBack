@@ -6,13 +6,13 @@ export class Agenda {
   id: number;
 
   @Column()
-  songTitle: string;
+  title: string;
 
   @Column()
-  studentName: string;
+  name: string;
 
   @Column()
-  studentInfo: string;
+  info: string;
 
   @Column()
   time: string;
