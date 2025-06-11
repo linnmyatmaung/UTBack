@@ -1,14 +1,8 @@
 import { Request, Response } from "express";
 import { Server } from "socket.io";
 import { AgendaService } from "@services/AgendaService";
-
+import { getIO } from "@config/Socket";
 export class AgendaController {
-  private static io: Server;
-
-  public static setSocketIO(ioInstance: Server) {
-    this.io = ioInstance;
-  }
-
   static async getAllAgendas(req: Request, res: Response) {
     try {
       const agendas = await AgendaService.getAllAgendas();
@@ -71,9 +65,7 @@ export class AgendaController {
       const updated = await AgendaService.setCurrentAgenda(id, data);
 
       // Emit real-time update via WebSocket
-      if (this.io) {
-        this.io.emit("agendaUpdated", updated);
-      }
+      getIO().emit("agendaUpdated", updated);
 
       res.status(200).json(updated);
     } catch (error) {

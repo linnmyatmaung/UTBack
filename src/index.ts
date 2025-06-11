@@ -6,13 +6,14 @@ import helmet from "helmet";
 import http from "http";
 import { Server } from "socket.io";
 
-import AgendaRoute, { setSocketIO } from "@routes/AgendaRoute";
+import AgendaRoute from "@routes/AgendaRoute";
 import PinCodeRoute from "@routes/PinCodeRoute";
 import AuthRoute from "@routes/AuthRoute";
 import SelectionRoute from "@routes/SelectionRoute";
 import VoteRoute from "@routes/VoteRoute";
 
 import { AppDataSource } from "@config/data-source";
+import { setIO } from "@config/Socket";
 
 dotenv.config();
 AppDataSource.initialize();
@@ -28,6 +29,9 @@ const io = new Server(server, {
   },
 });
 
+// Set the io instance for global use
+setIO(io); // ✅ Replaces setSocketIO()
+
 // Middleware
 app.use(helmet());
 app.use(
@@ -41,11 +45,17 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (e.g. uploaded files)
+// Serve static files
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-// Set up Socket.IO reference for other modules
-setSocketIO(io);
+// WebSocket events
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
 
 // Routes
 app.use("/agenda", AgendaRoute);
@@ -54,18 +64,9 @@ app.use("/auth", AuthRoute);
 app.use("/selection", SelectionRoute);
 app.use("/vote", VoteRoute);
 
-// Root route
+// Root
 app.get("/", (req, res) => {
   res.send("Hello from utycc welcome backend!");
-});
-
-// WebSocket connection
-io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
 });
 
 // Start server

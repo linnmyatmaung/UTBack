@@ -49,4 +49,20 @@ export class AuthService {
     }
     throw new Error("Invalid email or password");
   }
+
+  static async createAdmin(
+    data: AdminAuthRequestDto
+  ): Promise<AdminAuthRequestDto> {
+    // Hash the password
+    const hashedPassword = this.hashedPassword(data.password);
+
+    // Create a new admin entity
+    const newAdmin = AdminRepository.create({
+      username: data.username,
+      password: hashedPassword,
+    });
+
+    // Save the new admin into the database
+    return await AdminRepository.save(newAdmin);
+  }
 }

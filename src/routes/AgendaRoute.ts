@@ -1,18 +1,17 @@
 import { Router } from "express";
 import { AgendaController } from "@controllers/AgendaController";
-import { Server } from "socket.io";
-
+import { authenticateAdminToken } from "@middlewares/AuthMiddleware";
 const router = Router();
-
-export function setSocketIO(io: Server) {
-  AgendaController.setSocketIO(io);
-}
 
 router.get("/", AgendaController.getAllAgendas);
 router.get("/:id", AgendaController.getAgendaById);
-router.post("/", AgendaController.createAgenda);
-router.put("/:id", AgendaController.updateAgenda);
-router.put("/current/:id", AgendaController.currentAgenda);
-router.delete("/:id", AgendaController.deleteAgenda);
+router.post("/", authenticateAdminToken, AgendaController.createAgenda);
+router.put("/:id", authenticateAdminToken, AgendaController.updateAgenda);
+router.put(
+  "/current/:id",
+  authenticateAdminToken,
+  AgendaController.currentAgenda
+);
+router.delete("/:id", authenticateAdminToken, AgendaController.deleteAgenda);
 
 export default router;
