@@ -1,4 +1,4 @@
-# 🎉 UTYCC Welcome Voting Backend
+# 🎉 UTYCC Welcome Backend
 
 A robust RESTful API for managing voting, agendas, and user authentication for UTYCC events. Built with **Node.js**, **Express**, **TypeORM**, **MySQL**, and **Socket.IO** for real-time updates.
 
@@ -6,7 +6,7 @@ A robust RESTful API for managing voting, agendas, and user authentication for U
 
 ## 📝 About the Project
 
-This backend powers the UTYCC Welcome Event voting system. It enables secure voting for event participants, real-time agenda updates, and comprehensive admin management. The system is designed for reliability, scalability, and ease of integration with frontend applications.
+This backend powers the UTYCC Welcome Event voting and agenda system. It enables secure voting for event participants, real-time agenda updates, and comprehensive admin management. The system is designed for reliability, scalability, and ease of integration with frontend applications.
 
 **Key Capabilities:**
 
