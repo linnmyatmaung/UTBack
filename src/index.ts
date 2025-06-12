@@ -30,7 +30,7 @@ const io = new Server(server, {
 });
 
 // Set the io instance for global use
-setIO(io); // ✅ Replaces setSocketIO()
+setIO(io); 
 
 // Middleware
 app.use(helmet());
