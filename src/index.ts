@@ -58,14 +58,14 @@ io.on("connection", (socket) => {
 });
 
 // Routes
-app.use("/agenda", AgendaRoute);
-app.use("/pinCode", PinCodeRoute);
-app.use("/auth", AuthRoute);
-app.use("/selection", SelectionRoute);
-app.use("/vote", VoteRoute);
+app.use("/api/agenda", AgendaRoute);
+app.use("/api/pinCode", PinCodeRoute);
+app.use("/api/auth", AuthRoute);
+app.use("/api/selection", SelectionRoute);
+app.use("/api/vote", VoteRoute);
 
 // Root
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("Hello from utycc welcome backend!");
 });
 
