@@ -21,6 +21,7 @@ AppDataSource.initialize();
 const app = express();
 const server = http.createServer(app);
 
+// Initialize socket.io
 const io = new Server(server, {
   cors: {
     origin: ["http://localhost:5173", "http://192.168.43.189:5173"],
@@ -29,11 +30,12 @@ const io = new Server(server, {
   },
 });
 
-// Set the io instance for global use
-setIO(io); 
+setIO(io);
 
-// Middleware
+// === Middleware ===
 app.use(helmet());
+
+// CORS setup
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://192.168.43.189:5173"],
@@ -42,33 +44,40 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+// Serve static uploads with CORP & CORS headers
+app.use(
+  "/uploads",
+  (req, res, next) => {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    next();
+  },
+  express.static(path.join(__dirname, "../uploads"))
+);
 
-// WebSocket events
-io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
-
-// Routes
+// === Routes ===
 app.use("/api/agenda", AgendaRoute);
 app.use("/api/pinCode", PinCodeRoute);
 app.use("/api/auth", AuthRoute);
 app.use("/api/selection", SelectionRoute);
 app.use("/api/vote", VoteRoute);
 
-// Root
+// === Root ===
 app.get("/api", (req, res) => {
   res.send("Hello from utycc welcome backend!");
 });
 
-// Start server
+// === WebSocket ===
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
