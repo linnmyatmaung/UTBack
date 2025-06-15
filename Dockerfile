@@ -1,21 +1,25 @@
-# Use official Node.js LTS image
-FROM node:20
+# Step 1: Build
+FROM node:18-alpine AS builder
 
-# Create app directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of your project files
+# Copy source and build
 COPY . .
-
-# Build the TypeScript project
 RUN npm run build
 
-# Expose the port your app uses (5000 from your config)
-EXPOSE 5000
+# Step 2: Run
+FROM node:18-alpine
 
-# Start the app using the compiled JS file
+WORKDIR /app
+
+# Only copy what we need to run
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY .env .env
+
 CMD ["node", "dist/index.js"]
