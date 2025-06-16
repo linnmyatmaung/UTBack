@@ -1,4 +1,5 @@
 import { AgendaRepository } from "@repositories/AgendaRepository";
+import { DateTime } from "luxon";
 import { Not } from "typeorm";
 import {
   AgendaRequest,
@@ -60,36 +61,32 @@ export class AgendaService {
     id: number,
     data: CurrentAgendaRequest
   ): Promise<AgendaResponse> {
-    // Find the agenda to be updated
     const agenda = await AgendaRepository.findOneBy({ id });
     if (!agenda) {
       throw new Error("Agenda not found");
     }
-    // Update the agenda with the provided data
+
     Object.assign(agenda, data);
 
-    // Get the current time in the desired format
+    // Get current time in Yangon, Myanmar timezone
     const formatTime = () => {
-      const now = new Date();
-      let hours = now.getHours();
-      const minutes = now.getMinutes();
+      const yangonTime = DateTime.now().setZone("Asia/Yangon");
+      let hours = yangonTime.hour;
+      const minutes = yangonTime.minute;
       const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+      hours = hours % 12 || 12;
       const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
       return `${hours}:${formattedMinutes} ${ampm}`;
     };
 
-    // Set the time only if it's empty or undefined
     if (!agenda.time) {
       agenda.time = formatTime();
     }
 
-    agenda.current = true; // Set 'current' to true for the selected agenda
+    agenda.current = true;
 
-    // Save the updated agenda
     const updatedAgenda = await AgendaRepository.save(agenda);
 
-    // Return the relevant properties of the updated agenda
     const { time, title, name, info, current } = updatedAgenda;
     return { id, time, title, name, info, current };
   }
