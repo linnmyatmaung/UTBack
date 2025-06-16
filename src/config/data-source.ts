@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Use .ts for development, .js for production
+const fileExt = process.env.NODE_ENV === "production" ? "js" : "ts";
+
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: process.env.DB_HOST,
@@ -12,8 +15,8 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME,
-  entities: [path.resolve(__dirname, "../entities/**/*.ts")],
-  migrations: [path.resolve(__dirname, "../migrations/**/*.ts")],
+  entities: [path.resolve(__dirname, `../entities/**/*.${fileExt}`)],
+  migrations: [path.resolve(__dirname, `../migrations/**/*.${fileExt}`)],
   synchronize: false,
   logging: true,
 });
