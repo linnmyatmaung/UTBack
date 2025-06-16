@@ -24,7 +24,11 @@ const server = http.createServer(app);
 // Initialize socket.io
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://192.168.43.189:5173"],
+    origin: [
+      "http://localhost:5173",
+      "http://192.168.43.189:5173",
+      "https://ut-front.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
@@ -38,7 +42,11 @@ app.use(helmet());
 // CORS setup
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://192.168.43.189:5173"],
+    origin: [
+      "http://localhost:5173",
+      "http://192.168.43.189:5173",
+      "https://ut-front.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
