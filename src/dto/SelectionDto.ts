@@ -3,7 +3,7 @@ export type SelectionRequest = {
   gender: string;
   major: string;
   hobby: string;
-  dream?: string;
+  profileImg?: string;
 };
 
 export type SelectionResponse = {

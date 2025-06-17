@@ -56,17 +56,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static uploads with CORP & CORS headers
-app.use(
-  "/uploads",
-  (req, res, next) => {
-    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    next();
-  },
-  express.static(path.join(__dirname, "../uploads"))
-);
-
 // === Routes ===
 app.use("/api/agenda", AgendaRoute);
 app.use("/api/pinCode", PinCodeRoute);
